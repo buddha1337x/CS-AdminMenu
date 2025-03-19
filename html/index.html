@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Menu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+  <div id="adminMenu" class="menu">
+    <h1 id="menuTitle">CS-AdminMenu</h1>
+    <div class="section">
+      <div class="section-header">Self Actions <i class="fa-solid fa-caret-right toggle-icon"></i></div>
+      <div class="section-content">
+         <button class="menu-btn" data-action="revive">Revive</button>
+         <button class="menu-btn" data-action="godmode">Toggle Godmode</button>
+         <button class="menu-btn" data-action="teleport">Teleport to Waypoint</button>
+         <button class="menu-btn" data-action="noclip">Toggle Noclip</button>
+         <button class="menu-btn" data-action="fix_vehicle">Fix Vehicle</button>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-header">Players <i class="fa-solid fa-caret-right toggle-icon"></i></div>
+      <div class="section-content">
+         <select id="playerSelect">
+           <option value="">Select a player</option>
+         </select>
+         <div id="playerActions" style="display: none;">
+            <button class="menu-btn" data-action="revive_player">Revive Player</button>
+            <button class="menu-btn" data-action="bring_player">Bring Player</button>
+            <button class="menu-btn" data-action="teleport_player">Teleport to Player</button>
+            <button class="menu-btn kick-btn" data-action="show_kick_panel">Kick Player</button>
+            <button class="menu-btn ban-btn" data-action="show_ban_panel">Ban Player</button>
+            <button class="menu-btn" data-action="show_give_money">Give Money</button>
+            <button class="menu-btn" data-action="show_unban_panel">Unban Player</button>
+         </div>
+         <button class="menu-btn" data-action="getPlayerList" id="refreshPlayers">Refresh List</button>
+      </div>
+    </div>
+    <button class="menu-btn" data-action="close">Close Menu</button>
+  </div>
+  
+  <!-- Give Money Panel -->
+  <div id="giveMoneyPanel" class="action-panel">
+    <h2>Give Money</h2>
+    <input type="number" id="moneyAmount" placeholder="Amount" />
+    <select id="moneyType">
+      <option value="cash">Cash</option>
+      <option value="bank">Bank</option>
+    </select>
+    <button class="menu-btn" data-action="confirm_give_money">Confirm</button>
+    <button class="menu-btn" data-action="cancel_give_money">Cancel</button>
+  </div>
+  
+  <!-- Kick Panel -->
+  <div id="kickPanel" class="action-panel">
+    <h2>Kick Player</h2>
+    <input type="text" id="kickReason" placeholder="Reason for kick" />
+    <button class="menu-btn" data-action="confirm_kick">Confirm</button>
+    <button class="menu-btn" data-action="cancel_kick">Cancel</button>
+  </div>
+  
+  <!-- Ban Panel -->
+  <div id="banPanel" class="action-panel">
+    <h2>Ban Player</h2>
+    <input type="text" id="banReason" placeholder="Reason for ban" />
+    <select id="banDuration">
+      <option value="1 Day">1 Day</option>
+      <option value="3 Days">3 Days</option>
+      <option value="7 Days">7 Days</option>
+      <option value="Permanent">Permanent</option>
+    </select>
+    <button class="menu-btn" data-action="confirm_ban">Confirm</button>
+    <button class="menu-btn" data-action="cancel_ban">Cancel</button>
+  </div>
+  
+  <!-- Unban Panel -->
+  <div id="unbanPanel" class="action-panel">
+    <h2>Unban Player</h2>
+    <input type="text" id="unbanId" placeholder="Ban ID" />
+    <button class="menu-btn" data-action="confirm_unban">Confirm</button>
+    <button class="menu-btn" data-action="cancel_unban">Cancel</button>
+  </div>
+  
+  <script src="script.js"></script>
+</body>
+</html>
