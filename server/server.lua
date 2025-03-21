@@ -29,23 +29,16 @@ RegisterNetEvent("cs-adminmenu:server:getPlayers", function()
         local Player = QBCore.Functions.GetPlayer(tonumber(playerId))
         if Player then
             local name = (Player.PlayerData.charinfo and (Player.PlayerData.charinfo.firstname .. " " .. Player.PlayerData.charinfo.lastname)) or GetPlayerName(playerId)
-            -- Append player id in parentheses right after the name, then the heart icon for online
             table.insert(players, { id = playerId, name = name .. " (" .. playerId .. ") 💚", online = true })
             connected[playerId] = true
         end
     end
-    -- Clear out entries older than 15 minutes
     for id, data in pairs(recentLeft) do
-        if os.time() - data.time > 15 * 60 then
-            recentLeft[id] = nil
-        end
-    end
-    for id, data in pairs(recentLeft) do
-        if not connected[tostring(id)] then
+        if os.time() - data.time <= 15 * 60 and not connected[tostring(id)] then
             table.insert(players, { id = id, name = data.name .. " (" .. id .. ") 🖤", online = false })
         end
     end
-    TriggerClientEvent("cs-adminmenu:client:playerList", src, players)
+    TriggerClientEvent("cs-adminmenu:client:playerList", source, players)
 end)
 
 RegisterNetEvent("cs-adminmenu:server:revivePlayer", function(target)
@@ -126,6 +119,41 @@ RegisterNetEvent("cs-adminmenu:server:giveMoney", function(target, amount, money
     end
 end)
 
+RegisterNetEvent("cs-adminmenu:server:giveClothingMenu", function(target)
+    local src = source
+    local targetPlayer = QBCore.Functions.GetPlayer(tonumber(target))
+    if targetPlayer then
+        if Config.ClothingMenuType == "illuminum" then
+            TriggerClientEvent("illenium-appearance:client:openClothingShopMenu", tonumber(target), true)
+        else
+            TriggerClientEvent("qb-clothing:client:openMenu", tonumber(target))
+        end
+        TriggerClientEvent('QBCore:Notify', tonumber(target), "An admin has opened your clothing menu.", "success")
+    else
+        TriggerClientEvent('QBCore:Notify', src, "Player not found", "error")
+    end
+end)
+
+RegisterNetEvent("cs-adminmenu:server:openInventory", function(target)
+    local Player = QBCore.Functions.GetPlayer(target)
+    if Player then
+        TriggerServerEvent("inventory:server:OpenInventory", tonumber(target))
+    else
+        TriggerClientEvent('QBCore:Notify', source, "Player not found", "error")
+    end
+end)
+
+RegisterNetEvent("cs-adminmenu:server:giveItem", function(target, item, quantity)
+    local Player = QBCore.Functions.GetPlayer(target)
+    if Player then
+        local qty = tonumber(quantity) or 1
+        Player.Functions.AddItem(item, qty, nil, {})
+        TriggerClientEvent('QBCore:Notify', target, "You have been given " .. qty .. " x " .. item, "success")
+    else
+        TriggerClientEvent('QBCore:Notify', source, "Player not found", "error")
+    end
+end)
+
 RegisterNetEvent("cs-adminmenu:server:unbanPlayer", function(banId)
     MySQL.Async.execute('DELETE FROM CS_Admin_Bans WHERE id = ?', { banId }, function(affectedRows)
          if affectedRows > 0 then
@@ -136,7 +164,18 @@ RegisterNetEvent("cs-adminmenu:server:unbanPlayer", function(banId)
     end)
 end)
 
--- Player connecting ban check
+RegisterNetEvent("cs-adminmenu:server:getPlayerMoney", function(target)
+    local src = source
+    local targetPlayer = QBCore.Functions.GetPlayer(tonumber(target))
+    if targetPlayer then
+        local cash = targetPlayer.PlayerData.money.cash or 0
+        local bank = targetPlayer.PlayerData.money.bank or 0
+        TriggerClientEvent("cs-adminmenu:client:showPlayerMoney", src, cash, bank)
+    else
+        TriggerClientEvent('QBCore:Notify', src, "Player not found", "error")
+    end
+end)
+
 AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
     local src = source
     deferrals.defer()
