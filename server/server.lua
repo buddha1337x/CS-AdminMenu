@@ -1,5 +1,17 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 local allowedAce = Config.AllowedAcePermission
+local recentLeft = {}
+
+AddEventHandler('playerDropped', function(reason)
+    local src = source
+    local Player = QBCore.Functions.GetPlayer(src)
+    if Player then
+        recentLeft[tostring(src)] = {
+            name = (Player.PlayerData.charinfo and (Player.PlayerData.charinfo.firstname .. " " .. Player.PlayerData.charinfo.lastname)) or GetPlayerName(src),
+            time = os.time()
+        }
+    end
+end)
 
 QBCore.Commands.Add("adminmenu", "Open the admin menu", {}, false, function(source, args)
     if IsPlayerAceAllowed(source, allowedAce) then
@@ -12,11 +24,25 @@ end, "admin")
 RegisterNetEvent("cs-adminmenu:server:getPlayers", function()
     local src = source
     local players = {}
+    local connected = {}
     for _, playerId in ipairs(GetPlayers()) do
         local Player = QBCore.Functions.GetPlayer(tonumber(playerId))
         if Player then
-            local name = (Player.PlayerData.charinfo and (Player.PlayerData.charinfo.firstname .. " " .. Player.PlayerData.charinfo.lastname)) or ("ID: " .. playerId)
-            table.insert(players, { id = playerId, name = name })
+            local name = (Player.PlayerData.charinfo and (Player.PlayerData.charinfo.firstname .. " " .. Player.PlayerData.charinfo.lastname)) or GetPlayerName(playerId)
+            -- Append player id in parentheses right after the name, then the heart icon for online
+            table.insert(players, { id = playerId, name = name .. " (" .. playerId .. ") 💚", online = true })
+            connected[playerId] = true
+        end
+    end
+    -- Clear out entries older than 15 minutes
+    for id, data in pairs(recentLeft) do
+        if os.time() - data.time > 15 * 60 then
+            recentLeft[id] = nil
+        end
+    end
+    for id, data in pairs(recentLeft) do
+        if not connected[tostring(id)] then
+            table.insert(players, { id = id, name = data.name .. " (" .. id .. ") 🖤", online = false })
         end
     end
     TriggerClientEvent("cs-adminmenu:client:playerList", src, players)
@@ -132,7 +158,7 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
                 if banFound then
                     local reason = banFound.reason or "No reason provided"
                     local duration = banFound.duration or "N/A"
-                    local bannedAt = banFound.timestamp or ""
+                    local bannedAt = banFound.timestamp or "Unknown"
                     local bannedAtReadable = bannedAt
                     if tonumber(bannedAt) then
                         bannedAtReadable = os.date("%Y-%m-%d %H:%M:%S", math.floor(tonumber(bannedAt) / 1000))
