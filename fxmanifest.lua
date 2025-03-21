@@ -5,11 +5,10 @@ author 'carson - Classic Scripts'
 version '1.0.0'
 lua54 'yes'
 
-ui_page 'html/index.html'
+ui_page 'ui/index.html'
 
 shared_scripts {
-    'client/config.lua',
-    'server/config.lua',
+    'shared/config.lua',
 }
 
 client_scripts {
@@ -23,7 +22,7 @@ server_scripts {
 
 
 files {
-    'html/*.*',
+    'ui/*.*',
 }
 
 dependencies {
