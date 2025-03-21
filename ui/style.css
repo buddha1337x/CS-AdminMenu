@@ -123,20 +123,46 @@ body {
   display: none;
 }
 
+/* Action panels (Additional Options, Kick, Ban, Unban) */
 .action-panel {
   position: fixed;
   top: 50%;
-  left: calc(50% + 380px);
+  left: 100%; /* off-screen */
   transform: translateY(-50%);
   background: rgba(20,20,20,0.95);
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 20px rgba(0,0,0,0.7);
   width: 300px;
+  max-height: 90vh;
+  overflow-y: auto;
   text-align: center;
   z-index: 10000;
+  opacity: 0;
+  transition: all 0.5s ease;
+  pointer-events: none;
+}
+.action-panel.show {
+  left: calc(50% + 380px);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Player Money Panel styling (always visible under the admin menu) */
+.player-money-panel {
+  position: fixed;
+  top: calc(50% + 360px); /* Adjusted value to move it even further down */
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(20,20,20,0.95);
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.7);
+  width: 300px;
+  text-align: center;
+  color: #fff;
   display: none;
-  animation: fadeIn 0.3s ease-in-out;
+  transition: all 0.5s ease;
 }
 
 .action-panel h2 {
@@ -164,4 +190,23 @@ body {
   border-radius: 4px;
   border: 1px solid #ccc;
   font-size: 14px;
+}
+
+/* Additional styling for the Give Money section */
+.option-money {
+  background-color: #222;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+/* Ban duration dropdown styling */
+#banDuration {
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: #333;
+  color: #fff;
+  font-size: 14px;
+  margin-top: 10px;
 }

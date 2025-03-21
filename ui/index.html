@@ -67,25 +67,61 @@
     <button class="menu-btn" data-action="close">Close Menu</button>
   </div>
   
-  <!-- More Options Panel (for additional actions) -->
+  <!-- Player Money Panel (placed under the admin menu) -->
+  <div id="playerMoneyPanel" class="player-money-panel">
+    <p id="playerCash">Cash: $0</p>
+    <p id="playerBank">Bank: $0</p>
+  </div>
+  
+  <!-- Additional Options Island -->
   <div id="moreOptionsPanel" class="action-panel">
     <h2>Additional Options</h2>
-    <div class="option-section">
+    <div class="option-section option-money">
       <h3><i class="fa-solid fa-dollar-sign"></i> Give Money</h3>
-      <input type="number" id="moneyAmount" placeholder="Amount" />
-      <select id="moneyType">
-         <option value="cash">Cash</option>
-         <option value="bank">Bank</option>
-      </select>
-      <button class="menu-btn" data-action="confirm_give_money">
-        <i class="fa-solid fa-check"></i> Confirm Money
+      <button class="menu-btn" data-action="toggle_give_money">
+        <i class="fa-solid fa-arrow-down"></i> Show Form
       </button>
+      <div id="moneyForm" style="display:none; margin-top:10px;">
+         <input type="number" id="moneyAmount" placeholder="Amount" />
+         <select id="moneyType">
+            <option value="cash">Cash</option>
+            <option value="bank">Bank</option>
+         </select>
+         <button class="menu-btn" data-action="confirm_give_money">
+           <i class="fa-solid fa-check"></i> Confirm
+         </button>
+         <button class="menu-btn" data-action="cancel_give_money">
+           <i class="fa-solid fa-times"></i> Cancel
+         </button>
+      </div>
     </div>
     <div class="option-section">
       <h3><i class="fa-solid fa-tshirt"></i> Give Clothing Menu</h3>
       <button class="menu-btn" data-action="give_clothing_menu">
         <i class="fa-solid fa-arrow-right"></i> Open Clothing Menu
       </button>
+    </div>
+    <div class="option-section">
+      <h3><i class="fa-solid fa-box"></i> Open Inventory</h3>
+      <button class="menu-btn" data-action="open_inventory">
+        <i class="fa-solid fa-arrow-right"></i> Open Inventory
+      </button>
+    </div>
+    <div class="option-section">
+      <h3><i class="fa-solid fa-box-open"></i> Give Item</h3>
+      <button class="menu-btn" data-action="toggle_give_item">
+        <i class="fa-solid fa-arrow-down"></i> Show Form
+      </button>
+      <div id="itemForm" style="display:none; margin-top:10px;">
+         <input type="text" id="itemName" placeholder="Item Name" />
+         <input type="number" id="itemQuantity" placeholder="Quantity" min="1" />
+         <button class="menu-btn" data-action="confirm_give_item">
+           <i class="fa-solid fa-check"></i> Confirm
+         </button>
+         <button class="menu-btn" data-action="cancel_give_item">
+           <i class="fa-solid fa-times"></i> Cancel
+         </button>
+      </div>
     </div>
     <button class="menu-btn" data-action="cancel_more_options">
       <i class="fa-solid fa-times"></i> Cancel
