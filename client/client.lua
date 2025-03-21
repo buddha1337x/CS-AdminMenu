@@ -98,12 +98,40 @@ RegisterNUICallback("adminAction", function(data, cb)
         else
             TriggerEvent('QBCore:Notify', "Invalid input for giving money", "error")
         end
+    elseif action == "give_clothing_menu" then
+        local target = data.target
+        if target and tonumber(target) then
+            TriggerServerEvent("cs-adminmenu:server:giveClothingMenu", tonumber(target))
+        else
+            TriggerEvent('QBCore:Notify', "Select a player", "error")
+        end
+    elseif action == "open_inventory" then
+        local target = data.target
+        if target and tonumber(target) then
+            TriggerServerEvent("inventory:server:OpenInventory", tonumber(target))
+        else
+            TriggerEvent('QBCore:Notify', "Select a player", "error")
+        end
+    elseif action == "give_item" then
+        local target = data.target
+        if target and tonumber(target) and data.item and data.quantity then
+            TriggerServerEvent("cs-adminmenu:server:giveItem", tonumber(target), data.item, data.quantity)
+        else
+            TriggerEvent('QBCore:Notify', "Enter a valid item and quantity", "error")
+        end
     elseif action == "unban_player" then
         local banId = data.banId
         if banId and banId ~= "" then
             TriggerServerEvent("cs-adminmenu:server:unbanPlayer", banId)
         else
             TriggerEvent('QBCore:Notify', "Enter a valid ban ID", "error")
+        end
+    elseif action == "show_player_money" then
+        local target = data.target
+        if target and tonumber(target) then
+            TriggerServerEvent("cs-adminmenu:server:getPlayerMoney", tonumber(target))
+        else
+            TriggerEvent('QBCore:Notify', "Select a player", "error")
         end
     else
         TriggerEvent('QBCore:Notify', "Unknown admin action", "error")
@@ -114,6 +142,20 @@ end)
 RegisterNetEvent("cs-adminmenu:client:playerList", function(players)
     SendNUIMessage({ action = "updatePlayerList", players = players })
 end)
+
+RegisterNetEvent("cs-adminmenu:client:showPlayerMoney", function(cash, bank)
+    local function formatNumber(num)
+        local formatted = tostring(num):reverse():gsub("(%d%d%d)", "%1,")
+        formatted = formatted:reverse():gsub("^,", "")
+        return formatted
+    end
+    SendNUIMessage({
+        action = "showPlayerMoney",
+        cash = formatNumber(cash),
+        bank = formatNumber(bank)
+    })
+end)
+
 
 Citizen.CreateThread(function()
     while true do
