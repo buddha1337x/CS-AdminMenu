@@ -1,3 +1,5 @@
+-- client/client.lua
+
 local adminMenuOpen = false
 
 RegisterNetEvent("cs-adminmenu:client:openMenu", function(title)
@@ -15,11 +17,11 @@ end
 RegisterNUICallback("adminAction", function(data, cb)
     local action = data.action
     local ped = PlayerPedId()
-    
     if action == "close" then
         CloseAdminMenu()
     elseif action == "revive" then
-        HandleRevive()
+        -- Revive event moved to player_management.lua
+        TriggerEvent("cs-adminmenu:client:revivePlayer")
     elseif action == "godmode" then
         ToggleGodMode()
     elseif action == "teleport" then
@@ -31,10 +33,21 @@ RegisterNUICallback("adminAction", function(data, cb)
     elseif action == "fix_vehicle" then
         FixVehicle()
     elseif action == "player_ids" then
-        -- Trigger the separate player IDs functionality
         TriggerEvent('qb-admin:client:toggleBlips')
         TriggerEvent('qb-admin:client:toggleNames')
-
+    elseif action == "spawn_vehicle" then
+        local model = data.vehicleModel
+        if model and model ~= "" then
+            QBCore.Functions.SpawnVehicle(model, function(veh)
+                SetVehicleNumberPlateText(veh, "ADMIN")
+                SetEntityAsMissionEntity(veh, true, true)
+                local coords = GetEntityCoords(PlayerPedId())
+                TaskWarpPedIntoVehicle(PlayerPedId(), veh, -1)
+                TriggerEvent('QBCore:Notify', "Vehicle spawned!", "success")
+            end, GetEntityCoords(PlayerPedId()), 90.0, true, false)
+        else
+            TriggerEvent('QBCore:Notify', "Invalid vehicle model", "error")
+        end
     elseif action == "getPlayerList" then
         TriggerServerEvent("cs-adminmenu:server:getPlayers")
     elseif action == "revive_player" then
@@ -44,6 +57,12 @@ RegisterNUICallback("adminAction", function(data, cb)
         else
             TriggerEvent('QBCore:Notify', "Select a player", "error")
         end
+    elseif action == "show_kick_panel" then
+        SendNUIMessage({ action = "openKickIsland" })
+    elseif action == "show_ban_panel" then
+        SendNUIMessage({ action = "openBanIsland" })
+    elseif action == "show_unban_panel" then
+        SendNUIMessage({ action = "openUnbanIsland" })
     elseif action == "bring_player" then
         local target = data.target
         if target and tonumber(target) then
@@ -114,17 +133,9 @@ RegisterNUICallback("adminAction", function(data, cb)
         else
             TriggerEvent('QBCore:Notify', "Select a player", "error")
         end
-    -- Added branches for showing the islands
-    elseif action == "show_kick_panel" then
-        SendNUIMessage({ action = "openKickIsland" })
-    elseif action == "show_ban_panel" then
-        SendNUIMessage({ action = "openBanIsland" })
-    elseif action == "show_unban_panel" then
-        SendNUIMessage({ action = "openUnbanIsland" })
     else
         TriggerEvent('QBCore:Notify', "Unknown admin action", "error")
     end
-
     cb('ok')
 end)
 
@@ -152,16 +163,4 @@ Citizen.CreateThread(function()
             CloseAdminMenu()
         end
     end
-end)
-
-RegisterNetEvent("cs-adminmenu:client:bringPlayer", function(coords)
-    local ped = PlayerPedId()
-    SetEntityCoords(ped, coords.x, coords.y, coords.z, false, false, false, true)
-    TriggerEvent('QBCore:Notify', "You have been brought by an admin", "success")
-end)
-
-RegisterNetEvent("cs-adminmenu:client:teleportPlayer", function(coords)
-    local ped = PlayerPedId()
-    SetEntityCoords(ped, coords.x, coords.y, coords.z, false, false, false, true)
-    TriggerEvent('QBCore:Notify', "You have been teleported by an admin", "success")
 end)

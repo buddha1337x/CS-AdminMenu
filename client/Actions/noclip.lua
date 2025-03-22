@@ -248,11 +248,22 @@ ToggleNoClip = function(state)
     end
 end
 
-RegisterNetEvent('qb-admin:client:ToggleNoClip', function()
-    QBCore.Functions.TriggerCallback('qb-admin:isAdmin', function(isAdmin)
-        if not isAdmin then return end
-        ToggleNoClip(not IsNoClipping)
-    end)
+RegisterNetEvent("cs-adminmenu:client:openMenu", function(title)
+    adminMenuOpen = true
+    SetNuiFocus(true, true)
+    SendNUIMessage({ action = "open", title = title, position = Config.NotificationPosition })
+end)
+
+local function CloseAdminMenu()
+    adminMenuOpen = false
+    SetNuiFocus(false, false)
+    SendNUIMessage({ action = "close" })
+end
+
+RegisterNetEvent("cs-adminmenu:client:openMenu", function(title)
+    adminMenuOpen = true
+    SetNuiFocus(true, true)
+    SendNUIMessage({ action = "open", title = title, position = Config.NotificationPosition })
 end)
 
 AddEventHandler('onResourceStop', function(resourceName)

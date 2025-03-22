@@ -1,0 +1,21 @@
+QBCore = exports['qb-core']:GetCoreObject()
+
+RegisterNetEvent("cs-adminmenu:client:bringPlayer", function(coords)
+    local ped = PlayerPedId()
+    SetEntityCoords(ped, coords.x, coords.y, coords.z, false, false, false, true)
+    TriggerEvent('QBCore:Notify', "You have been brought by an admin", "success")
+end)
+
+RegisterNetEvent("cs-adminmenu:client:teleportPlayer", function(coords)
+    local ped = PlayerPedId()
+    SetEntityCoords(ped, coords.x, coords.y, coords.z, false, false, false, true)
+    TriggerEvent('QBCore:Notify', "You have been teleported by an admin", "success")
+end)
+
+RegisterNetEvent("cs-adminmenu:client:revivePlayer", function()
+    local ped = PlayerPedId()
+    local coords = GetEntityCoords(ped)
+    NetworkResurrectLocalPlayer(coords, true, true, false)
+    SetEntityHealth(ped, 200)
+    TriggerEvent('QBCore:Notify', "You have been revived by an admin", "success")
+end)
