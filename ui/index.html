@@ -86,18 +86,63 @@
           Settings <i class="fa-solid fa-caret-right toggle-icon"></i>
         </div>
         <div class="section-content">
-          <details class="settings-dropdown" open>
-            <summary style="cursor: pointer; font-size: 16px; color: #fff;">Menu Presets</summary>
+          <div class="preset-container">
             <button class="menu-btn preset-btn" data-preset="light_pink">Light Pink</button>
             <button class="menu-btn preset-btn" data-preset="modern">Modern</button>
             <button class="menu-btn preset-btn" data-preset="light_red">Light Red</button>
-          </details>
+          </div>
+          <br>
+          <!-- Add sound toggle -->
+          <label for="soundToggle" style="color: #fff;">Click Sound</label>
+          <input type="checkbox" id="soundToggle" checked>
+        </div>
+      </div>
+      
+      <!-- Admin Section -->
+      <div class="section tab-content" id="content-admin">
+        <div class="section-header">
+          Admin <i class="fa-solid fa-caret-right toggle-icon"></i>
+        </div>
+        <div class="section-content">
+          <!-- Weather Options Dropdown -->
+          <div class="dropdown-container">
+            <button class="menu-btn dropdown-btn" data-dropdown="weather">Weather Options</button>
+            <div class="dropdown-content" id="dropdown-weather" style="display: none;">
+              <button class="menu-btn" data-action="toggle_rain">Toggle Rain</button>
+              <button class="menu-btn" data-action="toggle_snow">Toggle Snow</button>
+            </div>
+          </div>
+          
+          <!-- FiveM Admin Options Dropdown -->
+          <div class="dropdown-container">
+            <button class="menu-btn dropdown-btn" data-dropdown="fivemAdmin">FiveM Admin Options</button>
+            <div class="dropdown-content" id="dropdown-fivemAdmin" style="display: none;">
+              <button class="menu-btn" data-action="restart_resource">Restart Resource</button>
+              <button class="menu-btn" data-action="sync_players">Sync Players</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Code Section -->
+      <div class="section tab-content" id="content-code">
+        <div class="section-header">
+          Code <i class="fa-solid fa-caret-right toggle-icon"></i>
+        </div>
+        <div class="section-content">
+          <!-- Developer Options Dropdown -->
+          <div class="dropdown-container">
+            <button class="menu-btn dropdown-btn" data-dropdown="devOptions">Developer Options</button>
+            <div class="dropdown-content" id="dropdown-devOptions" style="display: none;">
+              <button class="menu-btn" data-action="view_logs">View Logs</button>
+              <button class="menu-btn" data-action="reload_script">Reload Script</button>
+              <button class="menu-btn" data-action="toggle_debug">Toggle Debug Mode</button>
+            </div>
+          </div>
         </div>
       </div>
       
       <!-- (Other content sections can go here) -->
-      
-      <button class="menu-btn" data-action="close">Close Menu</button>
       
       <!-- Player Money Panel -->
       <div id="playerMoneyPanel" class="player-money-panel">
@@ -143,15 +188,31 @@
         <input type="text" id="unbanIdIsland" placeholder="Ban ID">
         <button class="menu-btn" data-action="confirm_unban">Confirm</button>
       </div>
-      <div id="island-vehicle" class="island-panel">
-        <button class="island-close" onclick="closeIsland('island-vehicle')">&times;</button>
-        <div class="island-header">Spawn Vehicle</div>
-        <input type="text" id="vehicleModel" placeholder="Vehicle Model">
-        <button class="menu-btn" data-action="spawn_vehicle">Spawn Vehicle</button>
+      <!-- Replace the existing vehicle spawn island panel with this Vehicle Catalog Section -->
+      <div class="section tab-content" id="content-vehicle">
+        <div class="section-header">
+          Vehicles <i class="fa-solid fa-caret-right toggle-icon"></i>
+        </div>
+        <div class="section-content">
+          <!-- Search Box -->
+          <input type="text" id="vehicleSearch" placeholder="Search for a vehicle..." style="width:100%; padding:10px; margin-bottom:10px; border-radius:4px; border:1px solid #ccc;">
+          <!-- Vehicle Catalog Grid -->
+          <div id="vehicleCatalog" class="vehicle-catalog">
+            <!-- Vehicle cards will be injected here -->
+          </div>
+          <!-- Static Close Menu button (this is the one you want) -->
+          <button class="menu-btn" data-action="close" style="margin:10px auto 0; display:block;">
+            Close Menu
+          </button>
+        </div>
       </div>
     </div>
   </div>
   
+  <audio id="clickSound" preload="auto">
+    <source src="https://r2.fivemanage.com/TT09HlxUtRUDiHGn61d49/audio/adriantnt_u_click.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+  </audio>
   <script src="script.js"></script>
 </body>
 </html>

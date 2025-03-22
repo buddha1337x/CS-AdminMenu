@@ -43,22 +43,15 @@ $(document).ready(function(){
     $('.tab-btn').removeClass('active');
     $(this).addClass('active');
     
-    // Hide all left-side content and island panels
+    // Hide all tab content and then show the selected one
     $('.tab-content').hide();
-    $('.island-panel').removeClass('active').fadeOut();
+    $('#content-' + selectedTab).fadeIn();
     
-    // If selected tab is an island: kick, ban, unban, or vehicle, show it; otherwise show left-side content.
-    if(selectedTab === "kick" || selectedTab === "ban" || selectedTab === "unban" || selectedTab === "vehicle"){
-      $('#island-' + selectedTab).addClass('active').fadeIn();
+    // Expand the menu horizontally if the vehicle tab is active
+    if(selectedTab === 'vehicle'){
+      $('#adminMenu').addClass('expanded-vehicle');
     } else {
-      $('#content-' + selectedTab).fadeIn();
-    }
-    
-    // Show player's money panel only when the Players tab ("clothing") is active
-    if(selectedTab !== "clothing"){
-      $("#playerMoneyPanel").fadeOut();
-    } else {
-      $("#playerMoneyPanel").fadeIn();
+      $('#adminMenu').removeClass('expanded-vehicle');
     }
   });
   
@@ -137,6 +130,14 @@ $(document).ready(function(){
   // Core admin menu button actions:
   $('.menu-btn').on('click', function(e){
     e.stopPropagation();
+
+    // Only play the click sound if soundToggle is checked.
+    if ($('#soundToggle').is(':checked')) {
+      clickSound.play().catch(function(error) {
+        console.error("Error playing click sound:", error);
+      });
+    }
+    
     const action = $(this).data('action');
     
     if(action === 'confirm_give_money'){
@@ -235,5 +236,169 @@ $(document).ready(function(){
     var newColor = $('#headerColorPicker').val();
     $('.menu-header').css('background', newColor);
     $('#adminMenu').css('background', newColor);
+  });
+
+  // Set a reduced volume for the click sound
+  var clickSound = document.getElementById('clickSound');
+  if(clickSound) {
+    clickSound.volume = 0.3; // Volume level from 0.0 to 1.0
+  }
+
+  $('.dropdown-btn').on('click', function(e){
+    e.stopPropagation();
+    const dropdownId = $(this).data('dropdown');
+    // Toggle the corresponding dropdown-content (based on element ID)
+    $('#dropdown-' + dropdownId).slideToggle();
+  });
+
+  // Global pagination variables
+  let currentPage = 1;
+  const itemsPerPage = 18;
+
+  // Expanded vehicles array
+  const vehicles = [
+    { category: "Sports", name: "Elegy", model: "elegy" },
+    { category: "Muscle", name: "Ruiner", model: "ruiner" },
+    { category: "SUV", name: "Baller", model: "baller" },
+    { category: "Sedan", name: "Premier", model: "premier" },
+    { category: "Sports", name: "Sultan RS", model: "sultanrs" },
+    { category: "Super", name: "Zentorno", model: "zentorno" },
+    { category: "Sports", name: "Tyrus", model: "tyrus" },
+    { category: "Sedan", name: "Oracle", model: "oracle" },
+    { category: "SUV", name: "XLS", model: "xls" },
+    { category: "Sports", name: "Penumbra", model: "penumbra" },
+    { category: "Super", name: "Turismo R", model: "turismor" },
+    // Existing additional vehicles
+    { category: "Sedan", name: "Asea", model: "asea" },
+    { category: "Sedan", name: "Fugitive", model: "fugitive" },
+    { category: "Sports", name: "Banshee", model: "banshee" },
+    { category: "Super", name: "Infernus", model: "infernus" },
+    { category: "Sports", name: "NineF", model: "ninef" },
+    { category: "Sports", name: "Rapid GT", model: "rapidgt" },
+    { category: "SUV", name: "Huntley", model: "huntley" },
+    { category: "Muscle", name: "Dominator", model: "dominator" },
+    { category: "Sports", name: "Furore GT", model: "furoregt" },
+    { category: "SUV", name: "Cavalcade", model: "cavalcade" },
+    // New vehicles added
+    { category: "Super", name: "Adder", model: "adder" },
+    { category: "Sports", name: "Bullet", model: "bullet" },
+    { category: "Sports", name: "Cheetah", model: "cheetah" },
+    { category: "Sports", name: "Coquette", model: "coquette" },
+    { category: "Muscle", name: "Gauntlet", model: "gauntlet" },
+    { category: "SUV", name: "Granger", model: "granger" },
+    { category: "Super", name: "Osiris", model: "osiris" },
+    { category: "Super", name: "Tampa", model: "tampa" },
+    { category: "Sports", name: "Rapid GT 2", model: "rapidgt2" },
+    // 30 New vehicles:
+    { category: "Sports", name: "Stinger", model: "stinger" },
+    { category: "Sports", name: "Tempesta", model: "tempesta" },
+    { category: "Super", name: "Vortex", model: "vortex" },
+    { category: "Super", name: "Tyrant", model: "tyrant" },
+    { category: "Muscle", name: "Phantom", model: "phantom" },
+    { category: "Muscle", name: "Lurcher", model: "lurcher" },
+    { category: "SUV", name: "Brawler", model: "brawler" },
+    { category: "SUV", name: "Kamacho", model: "kamacho" },
+    { category: "Sports", name: "Futo", model: "futo" },
+    { category: "Sports", name: "Jester", model: "jester" },
+    { category: "Sedan", name: "Stretch", model: "stretch" },
+    { category: "Sports", name: "Sultan", model: "sultan" },
+    { category: "Super", name: "Entity XF", model: "entityxf" },
+    { category: "SUV", name: "Blista", model: "blista" },
+    { category: "Sports", name: "Raiden", model: "raiden" },
+    { category: "Sports", name: "Rapid GT 3", model: "rapidgt3" },
+    { category: "Super", name: "Vacca", model: "vacca" },
+    { category: "Sports", name: "Sentinel", model: "sentinel" },
+    { category: "Sports", name: "Feltzer 2", model: "feltzer2" },
+    { category: "Muscle", name: "Hotknife", model: "hotknife" },
+    { category: "SUV", name: "Mesa", model: "mesa" }
+  ];
+  
+  // Function to render vehicle catalog with optional search filtering and pagination
+  function renderVehicleCatalog(filter = "") {
+    const container = $("#vehicleCatalog");
+    container.empty();
+    
+    // Filter vehicles by name (case-insensitive)
+    const filtered = vehicles.filter(v => v.name.toLowerCase().includes(filter.toLowerCase()));
+    
+    if(filtered.length === 0) {
+      container.append("<p>No vehicles found.</p>");
+      return;
+    }
+    
+    // Calculate pagination values
+    const totalPages = Math.ceil(filtered.length / itemsPerPage);
+    if(currentPage > totalPages) currentPage = totalPages;
+    if(currentPage < 1) currentPage = 1;
+    
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const vehiclesToShow = filtered.slice(startIndex, endIndex);
+    
+    // Render vehicle cards
+    vehiclesToShow.forEach(veh => {
+      const imageUrl = `https://raw.githubusercontent.com/MericcaN41/gta5carimages/main/images/${veh.model}.png`;
+      const card = $(`
+        <div class="vehicle-card">
+          <img src="${imageUrl}" alt="${veh.name}" onerror="this.onerror=null;this.src='https://via.placeholder.com/150';">
+          <p>${veh.name}</p>
+          <button data-action="spawn_vehicle" data-model="${veh.model}">Spawn</button>
+        </div>
+      `);
+      container.append(card);
+    });
+    
+    // Create and append pagination controls if there is more than one page
+    if(totalPages > 1) {
+      // Added extra padding-right to move the arrows farther right
+      const pagination = $('<div class="pagination-controls" style="margin-top:10px; text-align:right; padding-right:20px;"></div>');
+      
+      // Previous arrow icon (clickable, white)
+      const prevIcon = $(`
+        <i class="fa-solid fa-arrow-left" style="cursor:pointer; margin:0 10px; color:#fff;"></i>
+      `);
+      prevIcon.on("click", function(){
+        if(currentPage > 1){
+          currentPage--;
+          renderVehicleCatalog(filter);
+        }
+      });
+      pagination.append(prevIcon);
+      
+      // Next arrow icon (clickable, white)
+      const nextIcon = $(`
+        <i class="fa-solid fa-arrow-right" style="cursor:pointer; margin:0 10px; color:#fff;"></i>
+      `);
+      nextIcon.on("click", function(){
+        if(currentPage < totalPages){
+          currentPage++;
+          renderVehicleCatalog(filter);
+        }
+      });
+      pagination.append(nextIcon);
+      
+      container.append(pagination);
+    }
+  }
+  
+  // Initial render of the vehicle catalog
+  renderVehicleCatalog();
+  
+  // Handle search input filtering
+  $("#vehicleSearch").on("input", function(){
+    currentPage = 1; // Reset to first page on new search
+    const searchTerm = $(this).val();
+    renderVehicleCatalog(searchTerm);
+  });
+  
+  // Handle spawn vehicle button clicks using delegation
+  $("#vehicleCatalog").on("click", "button[data-action='spawn_vehicle']", function(){
+    const model = $(this).data("model");
+    const replaceCurrent = window.isInVehicle || false;
+    $.post(`https://${GetParentResourceName()}/adminAction`, JSON.stringify({ 
+      action: "spawn_vehicle", 
+      vehicleModel: model,
+      replace: replaceCurrent
+    }));
   });
 });

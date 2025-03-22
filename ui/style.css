@@ -19,14 +19,23 @@ body {
 /* Updated Admin Menu Container with a subtle overlay on the background image */
 .menu {
   position: relative;
-  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url("https://r2.fivemanage.com/TT09HlxUtRUDiHGn61d49/image/wp12177501.webp") no-repeat center center;
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0,0,0,0.3)), url("https://r2.fivemanage.com/TT09HlxUtRUDiHGn61d49/image/wp12177501.webp") no-repeat center center;
   background-size: cover;
   padding: 20px 20px 80px;
   border-radius: 8px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-  width: 360px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.7);
+  width: 360px; /* default menu width */
   text-align: center;
   animation: fadeIn 0.3s ease-in-out;
+  transition: width 0.3s ease, min-height 0.3s ease, padding-bottom 0.3s ease;
+}
+
+/* When vehicle catalog is active, expand the menu horizontally */
+.menu.expanded-vehicle {
+  width: 800px; /* expanded width; adjust as needed */
+  /* You can still retain vertical padding/min-height changes if needed: */
+  /* padding-bottom: 150px; */
+  /* min-height: 600px; */
 }
 
 @keyframes fadeIn {
@@ -319,4 +328,65 @@ body {
   background-color: rgb(255, 255, 255);
   border-radius: 4px;
   transform: translateX(-3px);  /* Shifts scrollbar track to the left */
+}
+
+/* Preset Container */
+.preset-container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+/* Dropdown Container */
+.dropdown-container {
+  margin-bottom: 10px;
+}
+.dropdown-btn {
+  width: 100%;
+  text-align: left;
+}
+.dropdown-content {
+  margin-top: 5px;
+  padding-left: 10px;
+}
+
+/* Vehicle Catalog */
+.vehicle-catalog {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.vehicle-card {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 4px;
+  padding: 5px;
+  text-align: center;
+  color: #fff;
+}
+
+.vehicle-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-bottom: 5px;
+}
+
+.vehicle-card button {
+  width: 100%;
+  padding: 5px;
+  background: #007bff;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+.vehicle-card button:hover {
+  background: #0056b3;
 }
