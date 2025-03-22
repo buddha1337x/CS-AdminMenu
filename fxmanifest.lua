@@ -1,7 +1,7 @@
 fx_version 'cerulean'
 game 'gta5'
 
-author 'carson - Classic Scripts'
+author 'Classic Scripts & Ez Scripts'
 version '1.0.0'
 lua54 'yes'
 
@@ -13,6 +13,7 @@ shared_scripts {
 
 client_scripts {
     'client/*.lua',
+    'client/Actions/*.lua',
 }
 
 server_scripts {
