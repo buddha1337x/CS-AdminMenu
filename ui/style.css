@@ -8,38 +8,50 @@ body {
   display: none;
 }
 
-.menu {
-  position: fixed;  /* relative so child absolute elements position relative to it */
+/* Menu Wrapper to keep menu centered and draggable */
+.menu-wrapper {
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(20, 20, 20, 0.95);
-  padding: 20px 20px 80px; /* leave room at bottom for money panel */
+}
+
+/* Admin Menu Container (relative for island positioning) */
+.menu {
+  position: relative;
+  background: rgba(20,20,20,0.95);
+  padding: 20px 20px 80px;
   border-radius: 8px;
   box-shadow: 0 0 20px rgba(0,0,0,0.7);
-  z-index: 9999;
   width: 360px;
   text-align: center;
   animation: fadeIn 0.3s ease-in-out;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translate(-50%, -45%); }
-  to { opacity: 1; transform: translate(-50%, -50%); }
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.menu h1 {
-  margin-bottom: 20px;
-  font-size: 28px;
+/* Menu Header (simplified, draggable with grab cursor) */
+.menu-header {
+  text-align: center;
+  padding: 10px;
+  cursor: grab;
+}
+.menu-header h1 {
+  margin: 0;
+  font-size: 24px;
   color: #fff;
 }
 
+/* Sections */
 .section {
   margin-bottom: 20px;
   border: 1px solid rgba(255,255,255,0.2);
   border-radius: 4px;
   overflow: hidden;
-  display: none;
+  display: block;
 }
 
 .section-header {
@@ -58,9 +70,9 @@ body {
 }
 
 .section-content {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255,255,255,0.05);
   padding: 10px;
-  display: none;
+  display: block;
 }
 
 #playerSelect {
@@ -72,8 +84,6 @@ body {
   background-color: #333;
   color: #fff;
   font-size: 14px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
   appearance: none;
 }
 
@@ -82,9 +92,8 @@ body {
   color: #fff;
 }
 
-/* Fixed max height with scrollbar for player actions */
 #playerActions {
-  max-height: 340px;
+  max-height: 300px;
   overflow-y: auto;
   scrollbar-color: black transparent;
 }
@@ -99,6 +108,7 @@ body {
   border-radius: 4px;
 }
 
+/* Menu Buttons */
 .menu-btn {
   display: block;
   width: 100%;
@@ -127,15 +137,8 @@ body {
 .ban-btn:hover {
   background: #c82333;
 }
-.more-options-icon {
-  font-size: 24px;
-  color: #fff;
-  cursor: pointer;
-  margin-top: 10px;
-  display: none;
-}
 
-/* Player Money Panel styling (attached under the admin menu) */
+/* Player Money Panel */
 .player-money-panel {
   position: absolute;
   bottom: -120px;
@@ -153,11 +156,11 @@ body {
   transition: all 0.5s ease;
 }
 
-/* Vertical Tabs (book tab style) */
+/* Vertical Tabs */
 .tabs-container {
   position: absolute;
   top: 0;
-  left: -50px; /* Hidden off to left */
+  left: -50px;
   width: 50px;
   height: 100%;
   background: #222;
@@ -185,21 +188,68 @@ body {
   background: #007bff;
 }
 
-/* Tab Content Panel (pops out from left) */
+/* Right Side Island Panels */
+.island-panel {
+  position: absolute;
+  top: 0; /* Align with the top of the menu container */
+  left: 100%; /* Position off the right side of the menu */
+  margin-left: 20px; /* Gap from the menu */
+  width: 300px;
+  background: rgba(20,20,20,0.95);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+  opacity: 0;
+  transform: translateX(100%);
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  z-index: 10000;
+  display: none;
+}
+.island-panel.active {
+  transform: translateX(0);
+  opacity: 1;
+  display: block;
+}
+
+.island-header {
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+  padding-bottom: 5px;
+}
+
+.island-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.island-close:hover {
+  color: #bbb;
+}
+
+/* Tab Content Panel (if used) */
 .tab-content-panel {
   position: absolute;
   top: 0;
-  left: -310px; /* Hidden off to left */
+  right: -310px;
   width: 300px;
   height: 100%;
   background: rgba(20,20,20,0.95);
   padding: 20px;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.7);
-  transition: left 0.3s ease;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.7);
+  transition: right 0.3s ease;
   display: none;
 }
 .tab-content-panel.active {
-  left: -310px; /* Adjust so that it appears adjacent to the menu */
+  right: 0;
   display: block;
 }
 .tab-content {
@@ -214,8 +264,8 @@ body {
   color: #fff;
 }
 
-/* Ban duration dropdown styling */
-#banDuration {
+/* Ban Duration Dropdown */
+#banDuration, #banDurationIsland {
   width: 100%;
   padding: 10px;
   border-radius: 4px;
@@ -224,4 +274,24 @@ body {
   color: #fff;
   font-size: 14px;
   margin-top: 10px;
+}
+
+/* Color Picker Styling (if used) */
+.color-picker-wrapper {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 10px 0;
+}
+.color-picker-wrapper input[type="color"] {
+  -webkit-appearance: none;
+  border: none;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  transition: transform 0.2s ease;
+}
+.color-picker-wrapper input[type="color"]:hover {
+  transform: scale(1.05);
 }

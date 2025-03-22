@@ -4,116 +4,110 @@
   <meta charset="UTF-8">
   <title>Admin Menu</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  <!-- Load jQuery first -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <!-- Load Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Main Admin Menu -->
-  <div id="adminMenu" class="menu">
-    <h1 id="menuTitle">CS-AdminMenu</h1>
-    
-    <!-- Self Actions Section -->
-    <div class="section tab-content" id="content-money">
-      <div class="section-header">
-        Self Actions <i class="fa-solid fa-caret-right toggle-icon"></i>
+  <!-- Draggable Menu Wrapper -->
+  <div id="menuWrapper" class="menu-wrapper">
+    <div id="adminMenu" class="menu">
+      <!-- Simplified Menu Header (drag here) -->
+      <div id="menuHeader" class="menu-header">
+        <h1 id="menuTitle">CS-AdminMenu</h1>
       </div>
-      <div class="section-content">
-         <button class="menu-btn" data-action="revive">
-           <i class="fa-solid fa-heart"></i> Revive
-         </button>
-         <button class="menu-btn" data-action="godmode">
-           <i class="fa-solid fa-shield"></i> Toggle Godmode
-         </button>
-         <button class="menu-btn" data-action="teleport">
-           <i class="fa-solid fa-location-arrow"></i> Teleport to Waypoint
-         </button>
-         <button class="menu-btn" data-action="noclip">
-           <i class="fa-solid fa-plane"></i> Toggle Noclip
-         </button>
-         <button class="menu-btn" data-action="fix_vehicle">
-           <i class="fa-solid fa-wrench"></i> Fix Vehicle
-         </button>
+      
+      <!-- Self Actions Section (left side) -->
+      <div class="section tab-content" id="content-money">
+        <div class="section-header">
+          Self Actions <i class="fa-solid fa-caret-right toggle-icon"></i>
+        </div>
+        <div class="section-content">
+           <button class="menu-btn" data-action="revive">
+             <i class="fa-solid fa-heartbeat"></i> Revive
+           </button>
+           <button class="menu-btn" data-action="godmode">
+             <i class="fa-solid fa-user-shield"></i> Toggle Godmode
+           </button>
+           <button class="menu-btn" data-action="teleport">
+             <i class="fa-solid fa-map-marker-alt"></i> Teleport to Waypoint
+           </button>
+           <button class="menu-btn" data-action="noclip">
+             <i class="fa-solid fa-arrows-alt"></i> Toggle Noclip
+           </button>
+           <button class="menu-btn" data-action="fix_vehicle">
+             <i class="fa-solid fa-tools"></i> Fix Vehicle
+           </button>
+        </div>
       </div>
-    </div>
-    
-    <!-- Players Section -->
-    <div class="section tab-content" id="content-clothing">
-      <div class="section-header">
-        Players <i class="fa-solid fa-caret-right toggle-icon"></i>
+      
+      <!-- Players Section (left side) -->
+      <div class="section tab-content" id="content-clothing">
+        <div class="section-header">
+          Players <i class="fa-solid fa-caret-right toggle-icon"></i>
+        </div>
+        <div class="section-content">
+           <select id="playerSelect">
+             <option value="">Select a player</option>
+           </select>
+           <div id="playerActions" style="display: none;">
+              <button class="menu-btn" data-action="revive_player">
+                <i class="fa-solid fa-heart"></i> Revive Player
+              </button>
+              <button class="menu-btn" data-action="bring_player">
+                <i class="fa-solid fa-hand-holding"></i> Bring Player
+              </button>
+              <button class="menu-btn" data-action="teleport_player">
+                <i class="fa-solid fa-location-arrow"></i> Teleport to Player
+              </button>
+              <button class="menu-btn kick-btn" data-action="show_kick_panel">
+                <i class="fa-solid fa-user-slash"></i> Kick Player
+              </button>
+              <button class="menu-btn ban-btn" data-action="show_ban_panel">
+                <i class="fa-solid fa-ban"></i> Ban Player
+              </button>
+              <button class="menu-btn" data-action="show_unban_panel">
+                <i class="fa-solid fa-unlock"></i> Unban Player
+              </button>
+           </div>
+        </div>
       </div>
-      <div class="section-content">
-         <select id="playerSelect">
-           <option value="">Select a player</option>
-         </select>
-         <div id="playerActions" style="display: none;">
-            <button class="menu-btn" data-action="revive_player">
-              <i class="fa-solid fa-heart"></i> Revive Player
-            </button>
-            <button class="menu-btn" data-action="bring_player">
-              <i class="fa-solid fa-hand-holding"></i> Bring Player
-            </button>
-            <button class="menu-btn" data-action="teleport_player">
-              <i class="fa-solid fa-location-arrow"></i> Teleport to Player
-            </button>
-            <button class="menu-btn kick-btn" data-action="show_kick_panel">
-              <i class="fa-solid fa-user-slash"></i> Kick Player
-            </button>
-            <button class="menu-btn ban-btn" data-action="show_ban_panel">
-              <i class="fa-solid fa-ban"></i> Ban Player
-            </button>
-            <button class="menu-btn" data-action="show_unban_panel">
-              <i class="fa-solid fa-unlock"></i> Unban Player
-            </button>
-         </div>
+      
+      <button class="menu-btn" data-action="close">Close Menu</button>
+      
+      <!-- Player Money Panel (attached under the menu) -->
+      <div id="playerMoneyPanel" class="player-money-panel">
+        <p id="playerCash">Cash: $0</p>
+        <p id="playerBank">Bank: $0</p>
       </div>
-    </div>
-    
-    <button class="menu-btn" data-action="close">Close Menu</button>
-    
-    <!-- Player Money Panel (attached under the menu) -->
-    <div id="playerMoneyPanel" class="player-money-panel">
-      <p id="playerCash">Cash: $0</p>
-      <p id="playerBank">Bank: $0</p>
-    </div>
-    
-    <!-- Vertical Tabs (pop-out from the left when a player is selected) -->
-    <div id="tabsContainer" class="tabs-container">
-      <button class="tab-btn" data-tab="money"><i class="fa-solid fa-gavel"></i></button>
-      <button class="tab-btn" data-tab="clothing"><i class="fa-solid fa-users"></i></button>
-    </div>
-    <div id="tabContentPanel" class="tab-content-panel">
-      <div id="content-money" class="tab-content">
-        <h3>Give Money</h3>
-        <input type="number" id="moneyAmount" placeholder="Amount" />
-        <select id="moneyType">
-          <option value="cash">Cash</option>
-          <option value="bank">Bank</option>
-        </select>
-        <button class="menu-btn" data-action="confirm_give_money">Confirm</button>
+      
+      <!-- Vertical Tabs Container with Logo at the Bottom -->
+      <div id="tabsContainer" class="tabs-container">
+        <button class="tab-btn" data-tab="money"><i class="fa-solid fa-gavel"></i></button>
+        <button class="tab-btn" data-tab="clothing"><i class="fa-solid fa-users"></i></button>
+        <button class="tab-btn" data-tab="code"><i class="fa-solid fa-code"></i></button>
+        <button class="tab-btn" data-tab="admin"><i class="fa-solid fa-shield"></i></button>
+        <button class="tab-btn" data-tab="random"><i class="fa-solid fa-gear"></i></button>
+        <!-- Logo Image: Clicking opens Classic Scripts website -->
+        <img src="https://r2.fivemanage.com/TT09HlxUtRUDiHGn61d49/image/d5db6f499da4823a791b1f51dd755035fcf7dc0a-removebg-preview.png" 
+             alt="Logo" style="height: 30px; margin-top: 10px; border-radius: 50%; cursor: pointer;">
       </div>
-      <div id="content-clothing" class="tab-content">
-        <h3>Give Clothing Menu</h3>
-        <button class="menu-btn" data-action="give_clothing_menu">Open Clothing Menu</button>
-      </div>
-      <div id="content-inventory" class="tab-content">
-        <h3>Open Inventory</h3>
-        <button class="menu-btn" data-action="open_inventory">Open Inventory</button>
-      </div>
-      <div id="content-item" class="tab-content">
-        <h3>Give Item</h3>
-        <input type="text" id="itemName" placeholder="Item Name" />
-        <input type="number" id="itemQuantity" placeholder="Quantity" min="1" />
-        <button class="menu-btn" data-action="confirm_give_item">Confirm</button>
-      </div>
-      <div id="content-kick" class="tab-content">
-        <h3>Kick Player</h3>
-        <input type="text" id="kickReason" placeholder="Reason for kick" />
+      
+      <!-- Right-Side Island Panels (individual islands) -->
+      <div id="island-kick" class="island-panel">
+        <button class="island-close" onclick="closeIsland('island-kick')">&times;</button>
+        <div class="island-header">Kick Player</div>
+        <input type="text" id="kickReasonIsland" placeholder="Reason for kick">
         <button class="menu-btn" data-action="confirm_kick">Confirm</button>
       </div>
-      <div id="content-ban" class="tab-content">
-        <h3>Ban Player</h3>
-        <input type="text" id="banReason" placeholder="Reason for ban" />
-        <select id="banDuration">
+      <div id="island-ban" class="island-panel">
+        <button class="island-close" onclick="closeIsland('island-ban')">&times;</button>
+        <div class="island-header">Ban Player</div>
+        <input type="text" id="banReasonIsland" placeholder="Reason for ban">
+        <select id="banDurationIsland">
           <option value="1 Day">1 Day</option>
           <option value="3 Days">3 Days</option>
           <option value="7 Days">7 Days</option>
@@ -121,13 +115,15 @@
         </select>
         <button class="menu-btn" data-action="confirm_ban">Confirm</button>
       </div>
-      <div id="content-unban" class="tab-content">
-        <h3>Unban Player</h3>
-        <input type="text" id="unbanId" placeholder="Ban ID" />
+      <div id="island-unban" class="island-panel">
+        <button class="island-close" onclick="closeIsland('island-unban')">&times;</button>
+        <div class="island-header">Unban Player</div>
+        <input type="text" id="unbanIdIsland" placeholder="Ban ID">
         <button class="menu-btn" data-action="confirm_unban">Confirm</button>
       </div>
     </div>
   </div>
+  
   <script src="script.js"></script>
 </body>
 </html>

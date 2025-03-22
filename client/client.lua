@@ -25,6 +25,8 @@ RegisterNUICallback("adminAction", function(data, cb)
     elseif action == "teleport" then
         TeleportToWaypoint()
     elseif action == "noclip" then
+        SetNuiFocus(false, false)
+        SendNUIMessage({ action = "close" })
         TriggerEvent('qb-admin:client:ToggleNoClip')
     elseif action == "fix_vehicle" then
         FixVehicle()
@@ -107,6 +109,13 @@ RegisterNUICallback("adminAction", function(data, cb)
         else
             TriggerEvent('QBCore:Notify', "Select a player", "error")
         end
+    -- Added branches for showing the islands
+    elseif action == "show_kick_panel" then
+        SendNUIMessage({ action = "openKickIsland" })
+    elseif action == "show_ban_panel" then
+        SendNUIMessage({ action = "openBanIsland" })
+    elseif action == "show_unban_panel" then
+        SendNUIMessage({ action = "openUnbanIsland" })
     else
         TriggerEvent('QBCore:Notify', "Unknown admin action", "error")
     end
