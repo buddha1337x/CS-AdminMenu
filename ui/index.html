@@ -15,92 +15,110 @@
   <!-- Draggable Menu Wrapper -->
   <div id="menuWrapper" class="menu-wrapper">
     <div id="adminMenu" class="menu">
-      <!-- Simplified Menu Header (Drag here) -->
+      <!-- Menu Header (unchanged) -->
       <div id="menuHeader" class="menu-header">
         <h1 id="menuTitle">CS-AdminMenu</h1>
       </div>
       
-      <!-- Self Actions Section (left side) -->
+      <!-- Self Actions Section -->
       <div class="section tab-content" id="content-money">
         <div class="section-header">
           Self Actions <i class="fa-solid fa-caret-right toggle-icon"></i>
         </div>
         <div class="section-content">
-           <button class="menu-btn" data-action="revive">
-             <i class="fa-solid fa-heartbeat"></i> Revive
-           </button>
-           <button class="menu-btn" data-action="godmode">
-             <i class="fa-solid fa-user-shield"></i> Toggle Godmode
-           </button>
-           <button class="menu-btn" data-action="teleport">
-             <i class="fa-solid fa-map-marker-alt"></i> Teleport to Waypoint
-           </button>
-           <button class="menu-btn" data-action="noclip">
-             <i class="fa-solid fa-arrows-alt"></i> Toggle Noclip
-           </button>
-           <button class="menu-btn" data-action="fix_vehicle">
-             <i class="fa-solid fa-tools"></i> Fix Vehicle
-           </button>
-           <!-- New button for Players IDs -->
-           <button class="menu-btn" data-action="player_ids">
-             <i class="fa-solid fa-id-badge"></i> Players IDs
-           </button>
+          <button class="menu-btn" data-action="revive">
+            <i class="fa-solid fa-heartbeat"></i> Revive
+          </button>
+          <button class="menu-btn" data-action="godmode">
+            <i class="fa-solid fa-user-shield"></i> Toggle Godmode
+          </button>
+          <button class="menu-btn" data-action="teleport">
+            <i class="fa-solid fa-map-marker-alt"></i> Teleport to Waypoint
+          </button>
+          <button class="menu-btn" data-action="noclip">
+            <i class="fa-solid fa-arrows-alt"></i> Toggle Noclip
+          </button>
+          <button class="menu-btn" data-action="fix_vehicle">
+            <i class="fa-solid fa-tools"></i> Fix Vehicle
+          </button>
+          <!-- New button for Players IDs -->
+          <button class="menu-btn" data-action="player_ids">
+            <i class="fa-solid fa-id-badge"></i> Players IDs
+          </button>
         </div>
       </div>
       
-      <!-- Players Section (left side) -->
+      <!-- Players Section -->
       <div class="section tab-content" id="content-clothing">
         <div class="section-header">
           Players <i class="fa-solid fa-caret-right toggle-icon"></i>
         </div>
         <div class="section-content">
-           <select id="playerSelect">
-             <option value="">Select a player</option>
-           </select>
-           <div id="playerActions" style="display: none;">
-              <button class="menu-btn" data-action="revive_player">
-                <i class="fa-solid fa-heart"></i> Revive Player
-              </button>
-              <button class="menu-btn" data-action="bring_player">
-                <i class="fa-solid fa-hand-holding"></i> Bring Player
-              </button>
-              <button class="menu-btn" data-action="teleport_player">
-                <i class="fa-solid fa-location-arrow"></i> Teleport to Player
-              </button>
-              <button class="menu-btn kick-btn" data-action="show_kick_panel">
-                <i class="fa-solid fa-user-slash"></i> Kick Player
-              </button>
-              <button class="menu-btn ban-btn" data-action="show_ban_panel">
-                <i class="fa-solid fa-ban"></i> Ban Player
-              </button>
-              <button class="menu-btn" data-action="show_unban_panel">
-                <i class="fa-solid fa-unlock"></i> Unban Player
-              </button>
-           </div>
+          <select id="playerSelect">
+            <option value="">Select a player</option>
+          </select>
+          <div id="playerActions" style="display: none;">
+            <button class="menu-btn" data-action="revive_player">
+              <i class="fa-solid fa-heart"></i> Revive Player
+            </button>
+            <button class="menu-btn" data-action="bring_player">
+              <i class="fa-solid fa-hand-holding"></i> Bring Player
+            </button>
+            <button class="menu-btn" data-action="teleport_player">
+              <i class="fa-solid fa-location-arrow"></i> Teleport to Player
+            </button>
+            <button class="menu-btn kick-btn" data-action="show_kick_panel">
+              <i class="fa-solid fa-user-slash"></i> Kick Player
+            </button>
+            <button class="menu-btn ban-btn" data-action="show_ban_panel">
+              <i class="fa-solid fa-ban"></i> Ban Player
+            </button>
+            <button class="menu-btn" data-action="show_unban_panel">
+              <i class="fa-solid fa-unlock"></i> Unban Player
+            </button>
+          </div>
         </div>
       </div>
       
+      <!-- Settings Section under the gear (random) tab -->
+      <div class="section tab-content" id="content-random">
+        <div class="section-header">
+          Settings <i class="fa-solid fa-caret-right toggle-icon"></i>
+        </div>
+        <div class="section-content">
+          <details class="settings-dropdown" open>
+            <summary style="cursor: pointer; font-size: 16px; color: #fff;">Menu Presets</summary>
+            <button class="menu-btn preset-btn" data-preset="light_pink">Light Pink</button>
+            <button class="menu-btn preset-btn" data-preset="modern">Modern</button>
+            <button class="menu-btn preset-btn" data-preset="light_red">Light Red</button>
+          </details>
+        </div>
+      </div>
+      
+      <!-- (Other content sections can go here) -->
+      
       <button class="menu-btn" data-action="close">Close Menu</button>
       
-      <!-- Player Money Panel (attached under the menu) -->
+      <!-- Player Money Panel -->
       <div id="playerMoneyPanel" class="player-money-panel">
         <p id="playerCash">Cash: $0</p>
         <p id="playerBank">Bank: $0</p>
       </div>
       
-      <!-- Vertical Tabs Container with Logo at the Bottom -->
+      <!-- Vertical Tabs Container -->
       <div id="tabsContainer" class="tabs-container">
         <button class="tab-btn" data-tab="money"><i class="fa-solid fa-gavel"></i></button>
         <button class="tab-btn" data-tab="clothing"><i class="fa-solid fa-users"></i></button>
         <button class="tab-btn" data-tab="code"><i class="fa-solid fa-code"></i></button>
         <button class="tab-btn" data-tab="admin"><i class="fa-solid fa-shield"></i></button>
         <button class="tab-btn" data-tab="random"><i class="fa-solid fa-gear"></i></button>
-        <!-- Logo Image: Clicking opens Classic Scripts website -->
+        <button class="tab-btn" data-tab="vehicle"><i class="fa-solid fa-car"></i></button>
+        <!-- Logo Image -->
         <img src="https://r2.fivemanage.com/TT09HlxUtRUDiHGn61d49/image/d5db6f499da4823a791b1f51dd755035fcf7dc0a-removebg-preview.png" 
              alt="Logo" style="height: 30px; margin-top: 10px; border-radius: 50%; cursor: pointer;">
       </div>
       
-      <!-- Right-Side Island Panels (individual islands) -->
+      <!-- Right-Side Island Panels -->
       <div id="island-kick" class="island-panel">
         <button class="island-close" onclick="closeIsland('island-kick')">&times;</button>
         <div class="island-header">Kick Player</div>
@@ -124,6 +142,12 @@
         <div class="island-header">Unban Player</div>
         <input type="text" id="unbanIdIsland" placeholder="Ban ID">
         <button class="menu-btn" data-action="confirm_unban">Confirm</button>
+      </div>
+      <div id="island-vehicle" class="island-panel">
+        <button class="island-close" onclick="closeIsland('island-vehicle')">&times;</button>
+        <div class="island-header">Spawn Vehicle</div>
+        <input type="text" id="vehicleModel" placeholder="Vehicle Model">
+        <button class="menu-btn" data-action="spawn_vehicle">Spawn Vehicle</button>
       </div>
     </div>
   </div>

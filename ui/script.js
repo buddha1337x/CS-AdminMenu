@@ -4,6 +4,28 @@ $(document).ready(function(){
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
   
+  // Preset function to apply a given menu style preset
+  function applyPreset(preset) {
+    if(preset === "light_pink") {
+      // Light Pink preset
+      $("#adminMenu").css("background", "#ffb6c1");
+    } else if(preset === "modern") {
+      // Modern preset with background image
+      $("#adminMenu").css({
+        "background": "url('https://r2.fivemanage.com/TT09HlxUtRUDiHGn61d49/image/wp12177501.webp') no-repeat center center / cover"
+      });
+    } else if(preset === "light_red") {
+      // Light Red preset
+      $("#adminMenu").css("background", "#ffcccb");
+    }
+  }
+  
+  // When a preset button is clicked, apply the corresponding preset.
+  $(".preset-btn").on("click", function(){
+    let preset = $(this).data("preset");
+    applyPreset(preset);
+  });
+  
   // When the players dropdown changes inside the Players section:
   $('#playerSelect').on('change', function(){
     let val = $(this).val();
@@ -25,14 +47,14 @@ $(document).ready(function(){
     $('.tab-content').hide();
     $('.island-panel').removeClass('active').fadeOut();
     
-    // If selected tab is "kick", "ban", or "unban", show corresponding island
-    if(selectedTab === "kick" || selectedTab === "ban" || selectedTab === "unban"){
+    // If selected tab is an island: kick, ban, unban, or vehicle, show it; otherwise show left-side content.
+    if(selectedTab === "kick" || selectedTab === "ban" || selectedTab === "unban" || selectedTab === "vehicle"){
       $('#island-' + selectedTab).addClass('active').fadeIn();
     } else {
       $('#content-' + selectedTab).fadeIn();
     }
     
-    // Show player's money panel only when the players tab (assumed "clothing") is active
+    // Show player's money panel only when the Players tab ("clothing") is active
     if(selectedTab !== "clothing"){
       $("#playerMoneyPanel").fadeOut();
     } else {
@@ -69,7 +91,7 @@ $(document).ready(function(){
     }
   });
   
-  // Standard section header toggle for collapsible sections:
+  // Section header toggle for collapsible sections:
   $('.section-header').on('click', function(){
     let content = $(this).next('.section-content');
     content.slideToggle();
@@ -101,9 +123,13 @@ $(document).ready(function(){
       $('.island-panel').removeClass('active').fadeOut();
       $('#island-unban').addClass('active').fadeIn();
     }
+    if(data.action === 'openVehicleIsland'){
+      $('.island-panel').removeClass('active').fadeOut();
+      $('#island-vehicle').addClass('active').fadeIn();
+    }
   });
   
-  // Function to close an island panel (called from the close button)
+  // Function to close an island panel
   window.closeIsland = function(id) {
     $('#' + id).removeClass('active').fadeOut();
   };
@@ -142,6 +168,12 @@ $(document).ready(function(){
       $.post(`https://${GetParentResourceName()}/adminAction`, JSON.stringify(payload));
       return;
     }
+    if(action === 'spawn_vehicle'){
+      let payload = { action: 'spawn_vehicle' };
+      payload.vehicleModel = $('#vehicleModel').val();
+      $.post(`https://${GetParentResourceName()}/adminAction`, JSON.stringify(payload));
+      return;
+    }
     if(action === 'give_clothing_menu'){
       let payload = { action: 'give_clothing_menu' };
       payload.target = $('#playerSelect').val();
@@ -170,7 +202,7 @@ $(document).ready(function(){
     $.post(`https://${GetParentResourceName()}/adminAction`, JSON.stringify(payload));
   });
   
-  // Draggable functionality for the menu using the header (using "grab" cursor)
+  // Draggable functionality for the menu using the header (grab cursor)
   let isDragging = false;
   let dragOffset = { x: 0, y: 0 };
   
@@ -196,10 +228,9 @@ $(document).ready(function(){
     $("#menuHeader").css("cursor", "grab");
   });
   
-  // Set initial cursor for draggable header
   $("#menuHeader").css("cursor", "grab");
   
-  // Optional: Theme application functionality:
+  // Optional: Theme application functionality (if using a theme input elsewhere)
   $('#applyThemeBtn').on('click', function(){
     var newColor = $('#headerColorPicker').val();
     $('.menu-header').css('background', newColor);

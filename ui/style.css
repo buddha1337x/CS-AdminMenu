@@ -16,13 +16,14 @@ body {
   transform: translate(-50%, -50%);
 }
 
-/* Admin Menu Container (relative for island positioning) */
+/* Updated Admin Menu Container with a subtle overlay on the background image */
 .menu {
   position: relative;
-  background: rgba(20,20,20,0.95);
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url("https://r2.fivemanage.com/TT09HlxUtRUDiHGn61d49/image/wp12177501.webp") no-repeat center center;
+  background-size: cover;
   padding: 20px 20px 80px;
   border-radius: 8px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.7);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
   width: 360px;
   text-align: center;
   animation: fadeIn 0.3s ease-in-out;
@@ -98,14 +99,17 @@ body {
   scrollbar-color: black transparent;
 }
 #playerActions::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
+  transform: translateX(16px);  /* Shifts scrollbar track to the left */
 }
 #playerActions::-webkit-scrollbar-track {
   background: transparent;
+  transform: translateX(16px);  /* Shifts scrollbar track to the left */
 }
 #playerActions::-webkit-scrollbar-thumb {
-  background-color: black;
+  background-color: rgb(255, 255, 255);
   border-radius: 4px;
+  transform: translateX(16px);  /* Shifts scrollbar track to the left */
 }
 
 /* Menu Buttons */
@@ -294,4 +298,25 @@ body {
 }
 .color-picker-wrapper input[type="color"]:hover {
   transform: scale(1.05);
+}
+
+/* Self Actions Scrollbar (applied to the section content in Self Actions) */
+#content-money .section-content {
+  max-height: 300px;
+  overflow-y: auto;
+  scrollbar-color: rgb(0, 0, 0) transparent;
+  transform: translateX(-3px);  /* Shifts scrollbar track to the left */
+}
+#content-money .section-content::-webkit-scrollbar {
+  width: 6px;
+  transform: translateX(-3px);  /* Shifts scrollbar track to the left */
+}
+#content-money .section-content::-webkit-scrollbar-track {
+  background: transparent;
+  transform: translateX(-3px);  /* Shifts scrollbar track to the left */
+}
+#content-money .section-content::-webkit-scrollbar-thumb {
+  background-color: rgb(255, 255, 255);
+  border-radius: 4px;
+  transform: translateX(-3px);  /* Shifts scrollbar track to the left */
 }
