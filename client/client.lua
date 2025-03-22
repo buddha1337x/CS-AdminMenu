@@ -30,6 +30,11 @@ RegisterNUICallback("adminAction", function(data, cb)
         TriggerEvent('qb-admin:client:ToggleNoClip')
     elseif action == "fix_vehicle" then
         FixVehicle()
+    elseif action == "player_ids" then
+        -- Trigger the separate player IDs functionality
+        TriggerEvent('qb-admin:client:toggleBlips')
+        TriggerEvent('qb-admin:client:toggleNames')
+
     elseif action == "getPlayerList" then
         TriggerServerEvent("cs-adminmenu:server:getPlayers")
     elseif action == "revive_player" then

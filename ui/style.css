@@ -195,7 +195,7 @@ body {
   left: 100%; /* Position off the right side of the menu */
   margin-left: 20px; /* Gap from the menu */
   width: 300px;
-  background: rgba(20,20,20,0.95);
+  background: rgba(20,20,20,0.95); /* Same as menu background */
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.6);
