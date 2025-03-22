@@ -9,12 +9,12 @@ body {
 }
 
 .menu {
-  position: fixed;
+  position: fixed;  /* relative so child absolute elements position relative to it */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background: rgba(20, 20, 20, 0.95);
-  padding: 20px;
+  padding: 20px 20px 80px; /* leave room at bottom for money panel */
   border-radius: 8px;
   box-shadow: 0 0 20px rgba(0,0,0,0.7);
   z-index: 9999;
@@ -39,6 +39,7 @@ body {
   border: 1px solid rgba(255,255,255,0.2);
   border-radius: 4px;
   overflow: hidden;
+  display: none;
 }
 
 .section-header {
@@ -81,6 +82,23 @@ body {
   color: #fff;
 }
 
+/* Fixed max height with scrollbar for player actions */
+#playerActions {
+  max-height: 340px;
+  overflow-y: auto;
+  scrollbar-color: black transparent;
+}
+#playerActions::-webkit-scrollbar {
+  width: 8px;
+}
+#playerActions::-webkit-scrollbar-track {
+  background: transparent;
+}
+#playerActions::-webkit-scrollbar-thumb {
+  background-color: black;
+  border-radius: 4px;
+}
+
 .menu-btn {
   display: block;
   width: 100%;
@@ -94,27 +112,21 @@ body {
   cursor: pointer;
   transition: background 0.2s ease-in-out;
 }
-
 .menu-btn:hover {
   background: #0056b3;
 }
-
 .kick-btn {
   background: #FFC107;
 }
-
 .kick-btn:hover {
   background: #e0a800;
 }
-
 .ban-btn {
   background: #dc3545;
 }
-
 .ban-btn:hover {
   background: #c82333;
 }
-
 .more-options-icon {
   font-size: 24px;
   color: #fff;
@@ -123,80 +135,83 @@ body {
   display: none;
 }
 
-/* Action panels (Additional Options, Kick, Ban, Unban) */
-.action-panel {
-  position: fixed;
-  top: 50%;
-  left: 100%; /* off-screen */
-  transform: translateY(-50%);
-  background: rgba(20,20,20,0.95);
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.7);
-  width: 300px;
-  max-height: 90vh;
-  overflow-y: auto;
-  text-align: center;
-  z-index: 10000;
-  opacity: 0;
-  transition: all 0.5s ease;
-  pointer-events: none;
-}
-.action-panel.show {
-  left: calc(50% + 380px);
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* Player Money Panel styling (always visible under the admin menu) */
+/* Player Money Panel styling (attached under the admin menu) */
 .player-money-panel {
-  position: fixed;
-  top: calc(50% + 360px); /* Adjusted value to move it even further down */
+  position: absolute;
+  bottom: -120px;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(20,20,20,0.95);
-  padding: 10px;
+  padding: 8px 12px;
   border-radius: 4px;
   box-shadow: 0 0 10px rgba(0,0,0,0.7);
-  width: 300px;
+  width: 90%;
   text-align: center;
   color: #fff;
+  font-size: 16px;
   display: none;
   transition: all 0.5s ease;
 }
 
-.action-panel h2 {
-  margin-bottom: 15px;
+/* Vertical Tabs (book tab style) */
+.tabs-container {
+  position: absolute;
+  top: 0;
+  left: -50px; /* Hidden off to left */
+  width: 50px;
+  height: 100%;
+  background: #222;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  overflow: hidden;
+  transition: left 0.3s ease;
+}
+.tabs-container.active {
+  left: 0;
+}
+.tab-btn {
+  display: block;
+  width: 100%;
+  padding: 10px 0;
+  border: none;
+  background: none;
   color: #fff;
-  font-size: 22px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.tab-btn.active,
+.tab-btn:hover {
+  background: #007bff;
 }
 
-.option-section {
-  margin-bottom: 15px;
-  border-bottom: 1px solid rgba(255,255,255,0.2);
-  padding-bottom: 10px;
+/* Tab Content Panel (pops out from left) */
+.tab-content-panel {
+  position: absolute;
+  top: 0;
+  left: -310px; /* Hidden off to left */
+  width: 300px;
+  height: 100%;
+  background: rgba(20,20,20,0.95);
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.7);
+  transition: left 0.3s ease;
+  display: none;
 }
-
-.option-section h3 {
+.tab-content-panel.active {
+  left: -310px; /* Adjust so that it appears adjacent to the menu */
+  display: block;
+}
+.tab-content {
+  display: none;
+}
+.tab-content.active {
+  display: block;
+}
+.tab-content h3 {
+  margin: 0 0 10px;
+  font-size: 16px;
   color: #fff;
-  font-size: 18px;
-  margin-bottom: 8px;
-}
-
-.action-panel input, .action-panel select {
-  width: 90%;
-  padding: 8px;
-  margin: 6px 0;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-}
-
-/* Additional styling for the Give Money section */
-.option-money {
-  background-color: #222;
-  padding: 10px;
-  border-radius: 4px;
 }
 
 /* Ban duration dropdown styling */

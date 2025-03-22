@@ -8,9 +8,12 @@
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
+  <!-- Main Admin Menu -->
   <div id="adminMenu" class="menu">
     <h1 id="menuTitle">CS-AdminMenu</h1>
-    <div class="section">
+    
+    <!-- Self Actions Section -->
+    <div class="section tab-content" id="content-money">
       <div class="section-header">
         Self Actions <i class="fa-solid fa-caret-right toggle-icon"></i>
       </div>
@@ -32,7 +35,9 @@
          </button>
       </div>
     </div>
-    <div class="section">
+    
+    <!-- Players Section -->
+    <div class="section tab-content" id="content-clothing">
       <div class="section-header">
         Players <i class="fa-solid fa-caret-right toggle-icon"></i>
       </div>
@@ -59,117 +64,70 @@
             <button class="menu-btn" data-action="show_unban_panel">
               <i class="fa-solid fa-unlock"></i> Unban Player
             </button>
-            <!-- Ellipsis icon appears only when a player is selected -->
-            <i class="fa-solid fa-ellipsis-h more-options-icon" data-action="show_more_options" style="display: none;"></i>
          </div>
       </div>
     </div>
+    
     <button class="menu-btn" data-action="close">Close Menu</button>
-  </div>
-  
-  <!-- Player Money Panel (placed under the admin menu) -->
-  <div id="playerMoneyPanel" class="player-money-panel">
-    <p id="playerCash">Cash: $0</p>
-    <p id="playerBank">Bank: $0</p>
-  </div>
-  
-  <!-- Additional Options Island -->
-  <div id="moreOptionsPanel" class="action-panel">
-    <h2>Additional Options</h2>
-    <div class="option-section option-money">
-      <h3><i class="fa-solid fa-dollar-sign"></i> Give Money</h3>
-      <button class="menu-btn" data-action="toggle_give_money">
-        <i class="fa-solid fa-arrow-down"></i> Show Form
-      </button>
-      <div id="moneyForm" style="display:none; margin-top:10px;">
-         <input type="number" id="moneyAmount" placeholder="Amount" />
-         <select id="moneyType">
-            <option value="cash">Cash</option>
-            <option value="bank">Bank</option>
-         </select>
-         <button class="menu-btn" data-action="confirm_give_money">
-           <i class="fa-solid fa-check"></i> Confirm
-         </button>
-         <button class="menu-btn" data-action="cancel_give_money">
-           <i class="fa-solid fa-times"></i> Cancel
-         </button>
+    
+    <!-- Player Money Panel (attached under the menu) -->
+    <div id="playerMoneyPanel" class="player-money-panel">
+      <p id="playerCash">Cash: $0</p>
+      <p id="playerBank">Bank: $0</p>
+    </div>
+    
+    <!-- Vertical Tabs (pop-out from the left when a player is selected) -->
+    <div id="tabsContainer" class="tabs-container">
+      <button class="tab-btn" data-tab="money"><i class="fa-solid fa-gavel"></i></button>
+      <button class="tab-btn" data-tab="clothing"><i class="fa-solid fa-users"></i></button>
+    </div>
+    <div id="tabContentPanel" class="tab-content-panel">
+      <div id="content-money" class="tab-content">
+        <h3>Give Money</h3>
+        <input type="number" id="moneyAmount" placeholder="Amount" />
+        <select id="moneyType">
+          <option value="cash">Cash</option>
+          <option value="bank">Bank</option>
+        </select>
+        <button class="menu-btn" data-action="confirm_give_money">Confirm</button>
+      </div>
+      <div id="content-clothing" class="tab-content">
+        <h3>Give Clothing Menu</h3>
+        <button class="menu-btn" data-action="give_clothing_menu">Open Clothing Menu</button>
+      </div>
+      <div id="content-inventory" class="tab-content">
+        <h3>Open Inventory</h3>
+        <button class="menu-btn" data-action="open_inventory">Open Inventory</button>
+      </div>
+      <div id="content-item" class="tab-content">
+        <h3>Give Item</h3>
+        <input type="text" id="itemName" placeholder="Item Name" />
+        <input type="number" id="itemQuantity" placeholder="Quantity" min="1" />
+        <button class="menu-btn" data-action="confirm_give_item">Confirm</button>
+      </div>
+      <div id="content-kick" class="tab-content">
+        <h3>Kick Player</h3>
+        <input type="text" id="kickReason" placeholder="Reason for kick" />
+        <button class="menu-btn" data-action="confirm_kick">Confirm</button>
+      </div>
+      <div id="content-ban" class="tab-content">
+        <h3>Ban Player</h3>
+        <input type="text" id="banReason" placeholder="Reason for ban" />
+        <select id="banDuration">
+          <option value="1 Day">1 Day</option>
+          <option value="3 Days">3 Days</option>
+          <option value="7 Days">7 Days</option>
+          <option value="Permanent">Permanent</option>
+        </select>
+        <button class="menu-btn" data-action="confirm_ban">Confirm</button>
+      </div>
+      <div id="content-unban" class="tab-content">
+        <h3>Unban Player</h3>
+        <input type="text" id="unbanId" placeholder="Ban ID" />
+        <button class="menu-btn" data-action="confirm_unban">Confirm</button>
       </div>
     </div>
-    <div class="option-section">
-      <h3><i class="fa-solid fa-tshirt"></i> Give Clothing Menu</h3>
-      <button class="menu-btn" data-action="give_clothing_menu">
-        <i class="fa-solid fa-arrow-right"></i> Open Clothing Menu
-      </button>
-    </div>
-    <div class="option-section">
-      <h3><i class="fa-solid fa-box"></i> Open Inventory</h3>
-      <button class="menu-btn" data-action="open_inventory">
-        <i class="fa-solid fa-arrow-right"></i> Open Inventory
-      </button>
-    </div>
-    <div class="option-section">
-      <h3><i class="fa-solid fa-box-open"></i> Give Item</h3>
-      <button class="menu-btn" data-action="toggle_give_item">
-        <i class="fa-solid fa-arrow-down"></i> Show Form
-      </button>
-      <div id="itemForm" style="display:none; margin-top:10px;">
-         <input type="text" id="itemName" placeholder="Item Name" />
-         <input type="number" id="itemQuantity" placeholder="Quantity" min="1" />
-         <button class="menu-btn" data-action="confirm_give_item">
-           <i class="fa-solid fa-check"></i> Confirm
-         </button>
-         <button class="menu-btn" data-action="cancel_give_item">
-           <i class="fa-solid fa-times"></i> Cancel
-         </button>
-      </div>
-    </div>
-    <button class="menu-btn" data-action="cancel_more_options">
-      <i class="fa-solid fa-times"></i> Cancel
-    </button>
   </div>
-  
-  <!-- Kick Panel -->
-  <div id="kickPanel" class="action-panel">
-    <h2>Kick Player</h2>
-    <input type="text" id="kickReason" placeholder="Reason for kick" />
-    <button class="menu-btn" data-action="confirm_kick">
-      <i class="fa-solid fa-check"></i> Confirm
-    </button>
-    <button class="menu-btn" data-action="cancel_kick">
-      <i class="fa-solid fa-times"></i> Cancel
-    </button>
-  </div>
-  
-  <!-- Ban Panel -->
-  <div id="banPanel" class="action-panel">
-    <h2>Ban Player</h2>
-    <input type="text" id="banReason" placeholder="Reason for ban" />
-    <select id="banDuration">
-      <option value="1 Day">1 Day</option>
-      <option value="3 Days">3 Days</option>
-      <option value="7 Days">7 Days</option>
-      <option value="Permanent">Permanent</option>
-    </select>
-    <button class="menu-btn" data-action="confirm_ban">
-      <i class="fa-solid fa-check"></i> Confirm
-    </button>
-    <button class="menu-btn" data-action="cancel_ban">
-      <i class="fa-solid fa-times"></i> Cancel
-    </button>
-  </div>
-  
-  <!-- Unban Panel -->
-  <div id="unbanPanel" class="action-panel">
-    <h2>Unban Player</h2>
-    <input type="text" id="unbanId" placeholder="Ban ID" />
-    <button class="menu-btn" data-action="confirm_unban">
-      <i class="fa-solid fa-check"></i> Confirm
-    </button>
-    <button class="menu-btn" data-action="cancel_unban">
-      <i class="fa-solid fa-times"></i> Cancel
-    </button>
-  </div>
-  
   <script src="script.js"></script>
 </body>
 </html>

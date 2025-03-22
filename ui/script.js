@@ -1,15 +1,43 @@
 $(document).ready(function(){
-  // Helper function to format numbers with commas
+  // Helper: Format numbers with commas
   function formatNumber(num) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
+  
+  // When the players dropdown changes inside the "money" tab:
+  $('#playerSelect').on('change', function(){
+    let val = $(this).val();
+    if(val && val !== ""){
+      $('#playerActions').slideDown();
+      // Request player's money info from the server
+      $.post(`https://${GetParentResourceName()}/adminAction`, JSON.stringify({ action: "show_player_money", target: val }));
+    } else {
+      $('#playerActions').slideUp();
+    }
+  });
+  
+  // Set default active tab to "money" (with person icon)
+  $('.tab-btn[data-tab="money"]').addClass('active');
+  $('.tab-content').hide();
+  $('#content-money').show();
 
+  $(document).ready(function() {
+    $('.tab-btn').on('click', function() {
+      const selectedTab = $(this).data('tab');
+      $('.tab-btn').removeClass('active');
+      $(this).addClass('active');
+      $('.tab-content').hide();
+      $('#content-' + selectedTab).fadeIn();
+    });
+  });
+  
+  // Global message handling from server:
   window.addEventListener('message', function(event){
     const data = event.data;
     if(data.action === 'open'){
       $('body').show();
       $('#menuTitle').text(data.title || "CS-AdminMenu");
-      // Refresh player list when menu opens
+      // Refresh player list from server
       $.post(`https://${GetParentResourceName()}/adminAction`, JSON.stringify({ action: "getPlayerList" }));
     } else if(data.action === 'close'){
       $('body').hide();
@@ -27,6 +55,7 @@ $(document).ready(function(){
     }
   });
   
+  // Standard section header toggle for collapsible sections:
   $('.section-header').click(function(){
     let content = $(this).next('.section-content');
     content.slideToggle();
@@ -38,173 +67,65 @@ $(document).ready(function(){
     }
   });
   
-  $('#playerSelect').on('change', function(){
-    let val = $(this).val();
-    if(val && val !== ""){
-      $('#playerActions').slideDown();
-      $('.more-options-icon').show();
-      $('.action-panel').removeClass('show'); // hide any open island
-      // Request player's money automatically when a player is selected
-      $.post(`https://${GetParentResourceName()}/adminAction`, JSON.stringify({ action: "show_player_money", target: val }));
-    } else {
-      $('#playerActions').slideUp();
-      $('.more-options-icon').hide();
-      $('.action-panel').removeClass('show');
-      $(".player-money-panel").hide();
-    }
-  });
-  
-  // Toggle More Options panel when ellipsis icon is clicked
-  $('.more-options-icon').click(function(e){
-    e.stopPropagation();
-    if($('#moreOptionsPanel').hasClass('show')){
-      $('#moreOptionsPanel').removeClass('show');
-    } else {
-      $('.action-panel').removeClass('show'); // close any other
-      $('#moreOptionsPanel').addClass('show');
-    }
-  });
-  
-  // Toggle form for Give Money
-  $('[data-action="toggle_give_money"]').click(function(e){
-    e.stopPropagation();
-    $('#moneyForm').slideToggle();
-  });
-  
-  // Toggle form for Give Item
-  $('[data-action="toggle_give_item"]').click(function(e){
-    e.stopPropagation();
-    $('#itemForm').slideToggle();
-  });
-  
+  // Core admin menu button actions:
   $('.menu-btn').click(function(e){
     e.stopPropagation();
     const action = $(this).data('action');
     
-    // Island-opening actions
-    if(action === 'show_give_money'){
-      $('.action-panel').removeClass('show');
-      $('#giveMoneyPanel').addClass('show');
+    if(action === 'confirm_give_money'){
+      let payload = { action: 'give_money' };
+      payload.target = $('#playerSelect').val();
+      payload.amount = $('#moneyAmount').val();
+      payload.moneyType = $('#moneyType').val();
+      $.post(`https://${GetParentResourceName()}/adminAction`, JSON.stringify(payload));
       return;
     }
-    if(action === 'show_kick_panel'){
-      $('.action-panel').removeClass('show');
-      $('#kickPanel').addClass('show');
+    if(action === 'confirm_kick'){
+      let payload = { action: 'kick_player' };
+      payload.target = $('#playerSelect').val();
+      payload.reason = $('#kickReason').val();
+      $.post(`https://${GetParentResourceName()}/adminAction`, JSON.stringify(payload));
       return;
     }
-    if(action === 'show_ban_panel'){
-      $('.action-panel').removeClass('show');
-      $('#banPanel').addClass('show');
+    if(action === 'confirm_ban'){
+      let payload = { action: 'ban_player' };
+      payload.target = $('#playerSelect').val();
+      payload.reason = $('#banReason').val();
+      payload.duration = $('#banDuration').val();
+      $.post(`https://${GetParentResourceName()}/adminAction`, JSON.stringify(payload));
       return;
     }
-    if(action === 'show_unban_panel'){
-      $('.action-panel').removeClass('show');
-      $('#unbanPanel').addClass('show');
+    if(action === 'confirm_unban'){
+      let payload = { action: 'unban_player' };
+      payload.banId = $('#unbanId').val();
+      $.post(`https://${GetParentResourceName()}/adminAction`, JSON.stringify(payload));
       return;
     }
-    
-    // Confirm / Cancel actions for islands
-    if(action === 'confirm_give_money' || action === 'cancel_give_money'){
-      if(action === 'confirm_give_money'){
-        let payload = { action: 'give_money' };
-        payload.target = $('#playerSelect').val();
-        payload.amount = $('#moneyAmount').val();
-        payload.moneyType = $('#moneyType').val();
-        $.post(`https://${GetParentResourceName()}/adminAction`, JSON.stringify(payload), function(response){
-          $('#moneyForm').slideUp();
-          $('#giveMoneyPanel').removeClass('show');
-        });
-      } else {
-        $('#moneyForm').slideUp();
-        $('#giveMoneyPanel').removeClass('show');
-      }
-      return;
-    }
-    
-    if(action === 'confirm_kick' || action === 'cancel_kick'){
-      if(action === 'confirm_kick'){
-        let payload = { action: 'kick_player' };
-        payload.target = $('#playerSelect').val();
-        payload.reason = $('#kickReason').val();
-        $.post(`https://${GetParentResourceName()}/adminAction`, JSON.stringify(payload), function(response){
-          $('#kickPanel').removeClass('show');
-        });
-      } else {
-        $('#kickPanel').removeClass('show');
-      }
-      return;
-    }
-    
-    if(action === 'confirm_ban' || action === 'cancel_ban'){
-      if(action === 'confirm_ban'){
-        let payload = { action: 'ban_player' };
-        payload.target = $('#playerSelect').val();
-        payload.reason = $('#banReason').val();
-        payload.duration = $('#banDuration').val();
-        $.post(`https://${GetParentResourceName()}/adminAction`, JSON.stringify(payload), function(response){
-          $('#banPanel').removeClass('show');
-        });
-      } else {
-        $('#banPanel').removeClass('show');
-      }
-      return;
-    }
-    
-    if(action === 'confirm_unban' || action === 'cancel_unban'){
-      if(action === 'confirm_unban'){
-        let payload = { action: 'unban_player' };
-        payload.banId = $('#unbanId').val();
-        $.post(`https://${GetParentResourceName()}/adminAction`, JSON.stringify(payload), function(response){
-          $('#unbanPanel').removeClass('show');
-        });
-      } else {
-        $('#unbanPanel').removeClass('show');
-      }
-      return;
-    }
-    
-    // Custom clothing menu action
     if(action === 'give_clothing_menu'){
       let payload = { action: 'give_clothing_menu' };
       payload.target = $('#playerSelect').val();
-      $.post(`https://${GetParentResourceName()}/adminAction`, JSON.stringify(payload), function(response){
-         $('#moreOptionsPanel').removeClass('show');
-      });
+      $.post(`https://${GetParentResourceName()}/adminAction`, JSON.stringify(payload));
       return;
     }
-    
-    // Open Inventory action using the server event trigger
     if(action === 'open_inventory'){
       let payload = { action: 'open_inventory' };
       payload.target = $('#playerSelect').val();
-      $.post(`https://${GetParentResourceName()}/adminAction`, JSON.stringify(payload), function(response){
-         $('#moreOptionsPanel').removeClass('show');
-      });
+      $.post(`https://${GetParentResourceName()}/adminAction`, JSON.stringify(payload));
       return;
     }
-    
-    // Confirm Give Item action
     if(action === 'give_item'){
       let payload = { action: 'give_item' };
       payload.target = $('#playerSelect').val();
       payload.item = $('#itemName').val();
       payload.quantity = $('#itemQuantity').val();
-      $.post(`https://${GetParentResourceName()}/adminAction`, JSON.stringify(payload), function(response){
-         $('#itemForm').slideUp();
-         $('#moreOptionsPanel').removeClass('show');
-      });
+      $.post(`https://${GetParentResourceName()}/adminAction`, JSON.stringify(payload));
       return;
     }
     
-    // For core player actions
     let payload = { action: action };
     if(['revive_player','bring_player','teleport_player','kick_player','ban_player','unban_player'].includes(action)){
       payload.target = $('#playerSelect').val();
     }
-    $.post(`https://${GetParentResourceName()}/adminAction`, JSON.stringify(payload), function(response){
-      if(action === 'close'){
-        $('body').hide();
-      }
-    });
+    $.post(`https://${GetParentResourceName()}/adminAction`, JSON.stringify(payload));
   });
 });
