@@ -390,3 +390,34 @@ body {
 .vehicle-card button:hover {
   background: #0056b3;
 }
+
+/* Tuning Options Grid */
+.tuning-options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  padding: 10px;
+}
+
+.tuning-option label {
+  display: block;
+  font-size: 0.8rem;
+  margin-bottom: 2px;
+  color: #fff; /* or any appropriate color */
+}
+
+.tuning-option input[type="number"] {
+  width: 100%;
+  padding: 5px;
+  font-size: 0.8rem;
+  box-sizing: border-box;
+  margin-bottom: 5px;
+}
+
+/* Make the Apply button a bit smaller and adjust spacing */
+#applyTuning {
+  padding: 8px;
+  font-size: 0.9rem;
+  margin: 10px;
+  width: calc(100% - 20px);
+}

@@ -139,6 +139,18 @@ RegisterNUICallback("adminAction", function(data, cb)
     cb('ok')
 end)
 
+RegisterNUICallback('updateVehicleTuning', function(data, cb)
+  local playerPed = PlayerPedId()
+  local vehicle = GetVehiclePedIsIn(playerPed, false)
+  if vehicle and vehicle ~= 0 then
+    SetVehicleHandlingFloat(vehicle, "CHandlingData", "fMass", tonumber(data.fmass))
+    SetVehicleHandlingFloat(vehicle, "CHandlingData", "fInitialDragCoeff", tonumber(data.fInitialDragCoeff))
+    SetVehicleHandlingFloat(vehicle, "CHandlingData", "fPercentSubmerged", tonumber(data.fPercentSubmerged))
+    -- Add additional handling modifications as needed...
+  end
+  cb("ok")
+end)
+
 RegisterNetEvent("cs-adminmenu:client:playerList", function(players)
     SendNUIMessage({ action = "updatePlayerList", players = players })
 end)

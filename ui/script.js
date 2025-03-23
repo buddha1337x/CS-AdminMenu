@@ -81,6 +81,11 @@ $(document).ready(function(){
       $("#playerCash").text("Cash: $" + formatNumber(data.cash));
       $("#playerBank").text("Bank: $" + formatNumber(data.bank));
       $(".player-money-panel").show();
+
+      // Hide the player money panel after 20 seconds
+      setTimeout(function(){
+        $(".player-money-panel").fadeOut();
+      }, 20000);
     }
   });
   
@@ -400,5 +405,67 @@ $(document).ready(function(){
       vehicleModel: model,
       replace: replaceCurrent
     }));
+  });
+
+  // Assuming your tab buttons have a class "tab-btn" and a data attribute "data-tab"
+  // and that your player's info panel has an id "playerInfo"
+  $(".tab-btn").on("click", function() {
+    // Remove active state from all tabs and hide all tab content sections
+    $(".tab-btn").removeClass("active");
+    $(".section.tab-content").hide();
+
+    // Set the clicked tab as active and show its section
+    $(this).addClass("active");
+    var tab = $(this).data("tab");
+    $("#content-" + tab).show();
+
+    // Hide the player's cash & bank info panel unless the players tab is active
+    // Change "players" to the appropriate value if different in your HTML
+    if(tab === "players") {
+      $("#playerInfo").show();
+    } else {
+      $("#playerInfo").hide();
+    }
+  });
+
+  // Hide the player's info panel by default
+  $("#playerInfo").hide();
+
+  $(".tab-btn").on("click", function() {
+    // Remove active state from all tabs and hide all tab content sections
+    $(".tab-btn").removeClass("active");
+    $(".section.tab-content").hide();
+
+    // Get the tab identifier for the clicked button
+    var tab = $(this).data("tab");
+    
+    // Mark the current tab as active and show its related content section
+    $(this).addClass("active");
+    $("#content-" + tab).show();
+
+    // Show the player's info panel only when the players tab is active
+    if(tab === "players") {
+      $("#playerInfo").show();
+    } else {
+      $("#playerInfo").hide();
+    }
+  });
+
+  // Dropdown toggle functionality
+  $('.dropdown-btn').on('click', function() {
+    const dropdown = $('#dropdown-' + $(this).data('dropdown'));
+    dropdown.slideToggle();
+  });
+
+  $('#applyTuning').on('click', function(){
+    const tuningData = {
+      action: "updateVehicleTuning", // Added action property
+      fmass: $('#fMass').val(),
+      fInitialDragCoeff: $('#fInitialDragCoeff').val(),
+      fPercentSubmerged: $('#fPercentSubmerged').val(),
+      // add additional parameters as needed
+    };
+    
+    $.post(`https://${GetParentResourceName()}/adminAction`, JSON.stringify(tuningData));
   });
 });
